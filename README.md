@@ -26,7 +26,7 @@ With bitfields you can define flags / booleans / bits /whatsoever for you model.
     model.finished?      // => true
     model.status_bits    // => 3
 
-# the table
+## the table
 
     DB = Sequel.sqlite
 
@@ -38,7 +38,7 @@ With bitfields you can define flags / booleans / bits /whatsoever for you model.
       Bignum :status_bits, :null => false, :default => 0
     end
 
-# installation
+## installation
 
     # gem approach
     gem install sequel-bit-fields
@@ -47,7 +47,15 @@ With bitfields you can define flags / booleans / bits /whatsoever for you model.
     # add this to your Gemfile
     gem 'sequel-bit-fields'
 
-# side notes
+## side notes
 
 You should always declare the column with a default value of 0. Also NULL should be disabled / not allowed.
 Otherwise the plugin will fail hard!
+
+## License
+Hereby released under MIT license.
+
+## Authors/Contributors
+
+- BlackLane GmbH
+- Sascha Depold ([Twitter](http://twitter.com/sdepold) | [Github](http://github.com/sdepold) | [Website](http://depold.com))
