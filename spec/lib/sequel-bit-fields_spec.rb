@@ -107,16 +107,28 @@ describe Sequel::Plugins::BitFields do
   end
 
   describe :field_sql do
-    it "returns the sql comparison for started" do
-      SpecModel.create.started_sql.should == "status_bits & 1 = 1"
+    it "returns the sql for truthy comparison of started" do
+      SpecModel.started_sql.should == "status_bits & 1 = 1"
     end
 
-    it "returns the sql comparison for finished" do
-      SpecModel.create.finished_sql.should == "status_bits & 2 = 2"
+    it "returns the sql for falsy comparison of started" do
+      SpecModel.started_sql(false).should == "status_bits & 1 != 1"
     end
 
-    it "returns the sql comparison for reviewed" do
-      SpecModel.create.reviewed_sql.should == "status_bits & 4 = 4"
+    it "returns the sql for truthy comparison of finished" do
+      SpecModel.finished_sql.should == "status_bits & 2 = 2"
+    end
+
+    it "returns the sql for falsy comparison of finished" do
+      SpecModel.finished_sql(false).should == "status_bits & 2 != 2"
+    end
+
+    it "returns the sql for truthy comparison of reviewed" do
+      SpecModel.reviewed_sql.should == "status_bits & 4 = 4"
+    end
+
+    it "returns the sql for falsy comparison of reviewed" do
+      SpecModel.reviewed_sql(false).should == "status_bits & 4 != 4"
     end
   end
 
