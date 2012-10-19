@@ -2,5 +2,26 @@ require 'sequel'
 
 module Sequel::Plugins
   module BitFields
+    def self.configure(model, bit_field_column, bit_fields, options = {})
+      bit_fields.each_with_index do |bit_field_name, i|
+        model.instance_eval do
+          define_method("#{bit_field_name}=") do |value|
+            self[bit_field_column] = if value
+              self[bit_field_column] | (2**i)
+            else
+              self[bit_field_column] ^ (2**i)
+            end
+          end
+
+          define_method("#{bit_field_name}?") do
+            self[bit_field_column] & (2**i) == (2**i)
+          end
+
+          define_method("#{bit_field_name}_sql") do
+            "#{bit_field_column} & #{2**i} = #{2**i}"
+          end
+        end
+      end
+    end
   end
 end

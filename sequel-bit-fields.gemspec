@@ -8,6 +8,4 @@ Gem::Specification.new do |s|
   s.email       = 'sascha@depold.com'
   s.files       = ["lib/sequel-bit-fields.rb"]
   s.homepage    = 'https://github.com/sdepold/sequel-bit-fields'
-
-  s.add_dependency('sequel')
 end
