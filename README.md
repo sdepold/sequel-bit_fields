@@ -3,6 +3,8 @@
 This is a plugin for [Sequel](http://sequel.rubyforge.org/) which allows the creation of bitfields.
 With bitfields you can define flags / booleans / bits /whatsoever for you model.
 
+[![Build Status](https://secure.travis-ci.org/sdepold/sequel-bit_fields.png)](http://travis-ci.org/sdepold/sequel-bit_fields)
+
 ## Usage
 
 Let's define a model:
