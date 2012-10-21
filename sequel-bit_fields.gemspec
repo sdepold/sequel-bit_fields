@@ -6,8 +6,8 @@ Gem::Specification.new do |s|
   s.description = "Use this plugin to add flags/bits to your Sequel based models."
   s.authors     = ["Sascha Depold"]
   s.email       = 'sascha@depold.com'
-  s.files       = ["lib/sequel-bit-fields.rb"]
-  s.homepage    = 'https://github.com/sdepold/sequel-bit-fields'
+  s.files       = ["lib/**/*.rb"]
+  s.homepage    = 'https://github.com/sdepold/sequel-bit_fields'
   s.license     = "MIT"
 
   add_runtime_dependency "sequel"
