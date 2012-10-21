@@ -1,11 +1,6 @@
-require 'rubygems'
-require 'bundler'
+require 'bundler/setup'
 Bundler.setup(:default, :development)
 
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
-$LOAD_PATH.unshift(File.dirname(__FILE__))
-
-require 'rspec'
 require 'sequel-bit-fields'
 
 RSpec.configure do |config|
