@@ -83,4 +83,4 @@ Hereby released under MIT license.
 ## Authors/Contributors
 
 - BlackLane GmbH
-- Sascha Depold ([Twitter](http://twitter.com/sdepold) | [Github](http://github.com/sdepold) | [Website](http://depold.com))
+- [Sascha Depold](http://depold.com) ([Twitter](http://twitter.com/sdepold) | [Github](http://github.com/sdepold))
