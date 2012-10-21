@@ -15,14 +15,14 @@ module Sequel::Plugins
         model.instance_eval do
           define_method("#{bit_field_name}=") do |value|
             self[bit_field_column] = if value
-              self[bit_field_column] | (index)
+              self[bit_field_column] | index
             else
-              self[bit_field_column] ^ (index)
+              self[bit_field_column] ^ index
             end
           end
 
           define_method("#{bit_field_name}?") do
-            self[bit_field_column] & (index) == (index)
+            self[bit_field_column] & index == index
           end
         end
       end
