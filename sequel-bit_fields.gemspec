@@ -10,5 +10,5 @@ Gem::Specification.new do |s|
   s.homepage    = 'https://github.com/sdepold/sequel-bit_fields'
   s.license     = "MIT"
 
-  add_runtime_dependency "sequel"
+  s.add_runtime_dependency "sequel"
 end
