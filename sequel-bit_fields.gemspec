@@ -1,5 +1,5 @@
 Gem::Specification.new do |s|
-  s.name        = 'sequel-bit-fields'
+  s.name        = 'sequel-bit_fields'
   s.version     = '0.2.0'
   s.date        = '2012-10-19'
   s.summary     = "A Sequel compatible version of common bit field technique."
@@ -8,4 +8,7 @@ Gem::Specification.new do |s|
   s.email       = 'sascha@depold.com'
   s.files       = ["lib/sequel-bit-fields.rb"]
   s.homepage    = 'https://github.com/sdepold/sequel-bit-fields'
+  s.license     = "MIT"
+
+  add_runtime_dependency "sequel"
 end
