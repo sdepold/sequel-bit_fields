@@ -7,7 +7,7 @@ module Sequel::Plugins
         index = 2**i
 
         model.class.instance_eval do
-          define_method("#{bit_field_name}_sql") do |value=true|
+          define_method("#{bit_field_name}_sql") do |value=nil|
             "#{bit_field_column} & #{index} #{'!' unless value}= #{index}"
           end
         end
