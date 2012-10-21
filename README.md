@@ -11,8 +11,6 @@ With bitfields you can define flags / booleans / bits /whatsoever for you model.
 Let's define a model:
 
 ```ruby
-require 'sequel-bit-fields'
-
 class MyModel < Sequel::Model
   # generic:
   plugin :bit_fields, :the_respective_column, [ :the, :different, :flags, :or, :bits ]
@@ -66,11 +64,11 @@ MyModel.where("#{ MyModel.started_sql(true) } AND #{ MyModel.finished_sql(true) 
 ## Installation
 
     # gem approach
-    gem install sequel-bit-fields
+    gem install sequel-bit_fields
 
     # bundler approach
     # add this to your Gemfile
-    gem 'sequel-bit-fields'
+    gem 'sequel-bit_fields'
 
 ## Side notes
 
