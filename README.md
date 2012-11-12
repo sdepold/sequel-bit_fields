@@ -59,7 +59,7 @@ MyModel.bit_fields( :status_bits ) # => [ :started, :finished, :reviewed ]
 
     DB = Sequel.sqlite
 
-    DB.create_table(:spec) do
+    DB.create_table(:my_models) do
       primary_key :id, :auto_increment => true
 
       # let's use Bignum as it has more space :)
