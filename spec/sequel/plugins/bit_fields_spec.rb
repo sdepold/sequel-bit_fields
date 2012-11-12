@@ -2,6 +2,7 @@ require 'spec_helper'
 
 class SpecModel < Sequel::Model(:spec)
   plugin :bit_fields, :status_bits, [ :started, :finished, :reviewed ]
+  plugin :bit_fields, :paranoid_bits, [ :allow_mail ]
 end
 
 describe Sequel::Plugins::BitFields do
@@ -18,6 +19,13 @@ describe Sequel::Plugins::BitFields do
   it "declares the method reviewed= and reviewed?" do
     SpecModel.create.should respond_to(:reviewed=)
     SpecModel.create.should respond_to(:reviewed?)
+  end
+
+  it "stores the bit fields" do
+    SpecModel.bit_fields[:status_bits].should   == [ :started, :finished, :reviewed ]
+    SpecModel.bit_fields(:status_bits).should   == [ :started, :finished, :reviewed ]
+    SpecModel.bit_fields[:paranoid_bits].should == [ :allow_mail ]
+    SpecModel.bit_fields(:paranoid_bits).should == [ :allow_mail ]
   end
 
   describe :field= do

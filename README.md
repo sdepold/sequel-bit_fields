@@ -25,15 +25,15 @@ And now we can play around with an instance of it:
 ```ruby
 model = MyModel.create
 
-model.started?       // => false
+model.started?        # => false
 model.started = true
-model.started?       // => true
-model.status_bits    // => 1
+model.started?        # => true
+model.status_bits     # => 1
 
-model.finished?      // => false
+model.finished?       # => false
 model.finished = true
-model.finished?      // => true
-model.status_bits    // => 3
+model.finished?       # => true
+model.status_bits     # => 3
 ```
 
 And we might want to find instances:
@@ -47,6 +47,12 @@ MyModel.where(MyModel.finished_sql(false)).all
 
 # let's find all the started and the finished instances
 MyModel.where("#{ MyModel.started_sql(true) } AND #{ MyModel.finished_sql(true) }").all
+```
+
+If you need the declared columns:
+
+```ruby
+MyModel.bit_fields( :status_bits ) # => [ :started, :finished, :reviewed ]
 ```
 
 ## The table
