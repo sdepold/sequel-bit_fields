@@ -1,5 +1,6 @@
 # v0.4.0
 - added methods that returns the defined columns and it's attributes
+- use fully qualified column names in sql statements
 
 # v0.3.0
 - fixed folder structure

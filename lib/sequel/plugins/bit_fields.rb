@@ -33,7 +33,7 @@ module Sequel::Plugins
             value = [*args].first
             value = true if value.nil?
 
-            "#{bit_field_column} & #{index} #{'!' unless value}= #{index}"
+            "`#{self.table_name.to_s}`.`#{bit_field_column}` & #{index} #{'!' unless value}= #{index}"
           end
         end
 

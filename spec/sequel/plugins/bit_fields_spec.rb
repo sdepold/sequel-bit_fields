@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-class SpecModel < Sequel::Model(:spec)
+class SpecModel < Sequel::Model
   plugin :bit_fields, :status_bits, [ :started, :finished, :reviewed ]
   plugin :bit_fields, :paranoid_bits, [ :allow_mail ]
 end
@@ -116,27 +116,27 @@ describe Sequel::Plugins::BitFields do
 
   describe :field_sql do
     it "returns the sql for truthy comparison of started" do
-      SpecModel.started_sql.should == "status_bits & 1 = 1"
+      SpecModel.started_sql.should == "`spec_models`.`status_bits` & 1 = 1"
     end
 
     it "returns the sql for falsy comparison of started" do
-      SpecModel.started_sql(false).should == "status_bits & 1 != 1"
+      SpecModel.started_sql(false).should == "`spec_models`.`status_bits` & 1 != 1"
     end
 
     it "returns the sql for truthy comparison of finished" do
-      SpecModel.finished_sql.should == "status_bits & 2 = 2"
+      SpecModel.finished_sql.should == "`spec_models`.`status_bits` & 2 = 2"
     end
 
     it "returns the sql for falsy comparison of finished" do
-      SpecModel.finished_sql(false).should == "status_bits & 2 != 2"
+      SpecModel.finished_sql(false).should == "`spec_models`.`status_bits` & 2 != 2"
     end
 
     it "returns the sql for truthy comparison of reviewed" do
-      SpecModel.reviewed_sql.should == "status_bits & 4 = 4"
+      SpecModel.reviewed_sql.should == "`spec_models`.`status_bits` & 4 = 4"
     end
 
     it "returns the sql for falsy comparison of reviewed" do
-      SpecModel.reviewed_sql(false).should == "status_bits & 4 != 4"
+      SpecModel.reviewed_sql(false).should == "`spec_models`.`status_bits` & 4 != 4"
     end
   end
 
