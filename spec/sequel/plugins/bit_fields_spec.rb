@@ -153,4 +153,25 @@ describe Sequel::Plugins::BitFields do
       end
     end
   end
+
+  describe :bit_field_values_for do
+    context "an object with finished set to true" do
+      before do
+        @model = SpecModel.create
+        @model.finished = true
+      end
+
+      it "returns a representing hash of values" do
+        values = @model.bit_field_values_for(:status_bits)
+        values.should == { :finished => true, :started => false, :reviewed => false }
+      end
+    end
+  end
+
+  describe :bit_field_indexes_for do
+    it "returns a hash with the name of the bit fields and its representing indexes" do
+      hash = SpecModel.bit_field_indexes_for(:status_bits)
+      hash.should == { :started => 1, :finished => 2, :reviewed => 4 }
+    end
+  end
 end

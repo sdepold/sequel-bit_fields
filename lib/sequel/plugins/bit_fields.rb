@@ -16,6 +16,42 @@ module Sequel::Plugins
             end
           end
         end
+
+        unless self.respond_to?(:bit_field_indexes_for)
+          define_method("bit_field_indexes_for") do |*args|
+            if column_name = [*args].first
+              hash = {}
+
+              @@bit_fields[column_name].each_with_index do |attribute, i|
+                hash[attribute.to_sym] = 2**i
+              end
+
+              hash
+            else
+              raise 'No bit field name was passed!'
+            end
+          end
+        end
+      end
+
+      model.instance_eval do
+        unless self.respond_to?(:bit_field_values_for)
+          # inject the method bit_field_values_for which
+          # returns a hash with all the values of the bit_fields
+          define_method("bit_field_values_for") do |*args|
+            if column_name = [*args].first
+              hash = {}
+
+              @@bit_fields[column_name].each do |attribute|
+                hash[attribute.to_sym] = self.send("#{attribute}?".to_sym)
+              end
+
+              hash
+            else
+              raise 'No bit field name was passed!'
+            end
+          end
+        end
       end
 
       bit_fields.each_with_index do |bit_field_name, i|

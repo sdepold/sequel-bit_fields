@@ -1,3 +1,7 @@
+# v0.5.0
+- added method that returns a hash of defined columns and it's indexes
+- added method that returns a hash of defined columns and it's values
+
 # v0.4.0
 - added methods that returns the defined columns and it's attributes
 - use fully qualified column names in sql statements

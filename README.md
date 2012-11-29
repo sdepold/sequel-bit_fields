@@ -55,6 +55,21 @@ If you need the declared columns:
 MyModel.bit_fields( :status_bits ) # => [ :started, :finished, :reviewed ]
 ```
 
+Or... If you need the indexes of the columns:
+
+```ruby
+MyModel.bit_field_indexes_for( :status_bits ) # => { :started => 1, :finished => 2, :reviewed => 4}
+```
+
+Or... If you need the values of the declared columns:
+
+```ruby
+model = MyModel.new
+model.finished => true
+model.bit_field_values_for( :status_bits )
+# => {:started => false, :finished => true, :reviewed => false}
+```
+
 ## The table
 
     DB = Sequel.sqlite
