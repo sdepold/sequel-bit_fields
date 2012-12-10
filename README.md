@@ -72,6 +72,8 @@ model.bit_field_values_for( :status_bits )
 
 ## The table
 
+If you are creating a new model from scratch:
+
     DB = Sequel.sqlite
 
     DB.create_table(:my_models) do
@@ -80,6 +82,18 @@ model.bit_field_values_for( :status_bits )
       # let's use Bignum as it has more space :)
       # set the default to 0 and disallow null values
       Bignum :status_bits, :null => false, :default => 0
+    end
+    
+##The migration
+
+If you want to extend an existing model:
+
+    Sequel.migration do
+      change do
+        alter_table :users do
+          add_column :permission_bits, Bignum, :default => 0, :null => false
+        end
+      end
     end
 
 ## Installation
