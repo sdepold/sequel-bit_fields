@@ -6,9 +6,19 @@ class SpecModel < Sequel::Model
 end
 
 class AnotherSpecModel < Sequel::Model
+  plugin :bit_fields, :some_bits, [ :fnord ]
+end
+
+class NoBitFieldsSpecModel < Sequel::Model
 end
 
 describe Sequel::Plugins::BitFields do
+  describe :bit_fields_for_models do
+    it 'returns all defined bit fields for all models' do
+      Sequel::Plugins::BitFields.bit_fields_for_models.keys.sort.should == ['AnotherSpecModel', 'SpecModel']
+    end
+  end
+
   it "declares the method started= and started?" do
     SpecModel.create.should respond_to(:started=)
     SpecModel.create.should respond_to(:started?)
@@ -39,8 +49,14 @@ describe Sequel::Plugins::BitFields do
       }
     end
 
+    it "returns some_bits of the AnotherSpecModel" do
+      AnotherSpecModel.bit_fields.should == {
+        :some_bits => [ :fnord ]
+      }
+    end
+
     it "raises if bit_fields is called for a model which doesn't use the plugin" do
-      expect { AnotherSpecModel.bit_fields }.to raise_error
+      expect { NoBitFieldsSpecModel.bit_fields }.to raise_error
     end
   end
 

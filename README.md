@@ -49,25 +49,34 @@ MyModel.where(MyModel.finished_sql(false)).all
 MyModel.where("#{ MyModel.started_sql(true) } AND #{ MyModel.finished_sql(true) }").all
 ```
 
-If you need the declared columns:
+### Get the declared columns
 
 ```ruby
+MyModel.bit_fields # => { :status_bits => [ :started, :finished, :reviewed ] }
 MyModel.bit_fields( :status_bits ) # => [ :started, :finished, :reviewed ]
 ```
 
-Or... If you need the indexes of the columns:
+### Get the indexes of the columns
 
 ```ruby
-MyModel.bit_field_indexes_for( :status_bits ) # => { :started => 1, :finished => 2, :reviewed => 4}
+MyModel.bit_field_indexes_for( :status_bits )
+# => { :started => 1, :finished => 2, :reviewed => 4 }
 ```
 
-Or... If you need the values of the declared columns:
+### Get the values of the declared columns:
 
 ```ruby
 model = MyModel.new
 model.finished => true
 model.bit_field_values_for( :status_bits )
 # => {:started => false, :finished => true, :reviewed => false}
+```
+
+### Get all bit fields of all models, which use the plugin
+
+```ruby
+Sequel::Plugins::BitFields.bit_fields_for_models
+# => { 'MyModel' => { :status_bits => [ :started, :finished, :reviewed ] } }
 ```
 
 ## The table
@@ -83,7 +92,7 @@ If you are creating a new model from scratch:
       # set the default to 0 and disallow null values
       Bignum :status_bits, :null => false, :default => 0
     end
-    
+
 ##The migration
 
 If you want to extend an existing model:
