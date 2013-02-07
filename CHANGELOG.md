@@ -1,3 +1,6 @@
+# v0.5.1 #
+- class methods used to get defined for all classes. this is fixed.
+
 # v0.5.0
 - added method that returns a hash of defined columns and it's indexes
 - added method that returns a hash of defined columns and it's values

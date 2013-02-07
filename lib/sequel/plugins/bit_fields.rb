@@ -3,33 +3,33 @@ require 'sequel'
 module Sequel::Plugins
   module BitFields
     def self.configure(model, bit_field_column, bit_fields, options = {})
-      model.class.instance_eval do
+      model.class_eval do
         @@bit_fields ||= {}
         @@bit_fields[bit_field_column] = bit_fields
+      end
 
-        unless self.respond_to?(:bit_fields)
-          define_method("bit_fields") do |*args|
-            if column_name = [*args].first
-              @@bit_fields[column_name]
-            else
-              @@bit_fields
-            end
+      unless model.respond_to?(:bit_fields)
+        model.send(:define_singleton_method, :bit_fields) do |*args|
+          if column_name = [*args].first
+            @@bit_fields[column_name]
+          else
+            @@bit_fields
           end
         end
+      end
 
-        unless self.respond_to?(:bit_field_indexes_for)
-          define_method("bit_field_indexes_for") do |*args|
-            if column_name = [*args].first
-              hash = {}
+      unless model.respond_to?(:bit_field_indexes_for)
+        model.send(:define_singleton_method, :bit_field_indexes_for) do |*args|
+          if column_name = [*args].first
+            hash = {}
 
-              @@bit_fields[column_name].each_with_index do |attribute, i|
-                hash[attribute.to_sym] = 2**i
-              end
-
-              hash
-            else
-              raise 'No bit field name was passed!'
+            @@bit_fields[column_name].each_with_index do |attribute, i|
+              hash[attribute.to_sym] = 2**i
             end
+
+            hash
+          else
+            raise 'No bit field name was passed!'
           end
         end
       end

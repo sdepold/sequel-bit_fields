@@ -5,6 +5,9 @@ class SpecModel < Sequel::Model
   plugin :bit_fields, :paranoid_bits, [ :allow_mail ]
 end
 
+class AnotherSpecModel < Sequel::Model
+end
+
 describe Sequel::Plugins::BitFields do
   it "declares the method started= and started?" do
     SpecModel.create.should respond_to(:started=)
@@ -21,11 +24,24 @@ describe Sequel::Plugins::BitFields do
     SpecModel.create.should respond_to(:reviewed?)
   end
 
-  it "stores the bit fields" do
-    SpecModel.bit_fields[:status_bits].should   == [ :started, :finished, :reviewed ]
-    SpecModel.bit_fields(:status_bits).should   == [ :started, :finished, :reviewed ]
-    SpecModel.bit_fields[:paranoid_bits].should == [ :allow_mail ]
-    SpecModel.bit_fields(:paranoid_bits).should == [ :allow_mail ]
+  describe :bit_fields do
+    it "stores the bit fields" do
+      SpecModel.bit_fields[:status_bits].should   == [ :started, :finished, :reviewed ]
+      SpecModel.bit_fields(:status_bits).should   == [ :started, :finished, :reviewed ]
+      SpecModel.bit_fields[:paranoid_bits].should == [ :allow_mail ]
+      SpecModel.bit_fields(:paranoid_bits).should == [ :allow_mail ]
+    end
+
+    it "returns all bit_fields of the models" do
+      SpecModel.bit_fields.should == {
+        :status_bits   => [ :started, :finished, :reviewed ],
+        :paranoid_bits => [ :allow_mail ]
+      }
+    end
+
+    it "raises if bit_fields is called for a model which doesn't use the plugin" do
+      expect { AnotherSpecModel.bit_fields }.to raise_error
+    end
   end
 
   describe :field= do
