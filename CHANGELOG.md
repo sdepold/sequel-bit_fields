@@ -1,3 +1,8 @@
+# v0.7.0
+- fixed interpretation of bit_fields passed to the constructor
+- fixed compatibility of Model.new
+- added scoping of bit_fields
+
 # v0.6.0
 - added support for truthy or falsy values
 - fixed setting of false if bit_fields was previously already false
