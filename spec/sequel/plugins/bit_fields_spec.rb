@@ -1,12 +1,13 @@
 require 'spec_helper'
 
 class SpecModel < Sequel::Model
-  plugin :bit_fields, :status_bits, [ :started, :finished, :reviewed ]
+  plugin :bit_fields, :status_bits,   [ :started, :finished, :reviewed ]
   plugin :bit_fields, :paranoid_bits, [ :allow_mail ]
 end
 
 class AnotherSpecModel < Sequel::Model
-  plugin :bit_fields, :some_bits, [ :fnord ]
+  plugin :bit_fields, :some_bits,       [ :fnord ], :scope => :some
+  plugin :bit_fields, :some_other_bits, [ :fnord ], :scope => true
 end
 
 class NoBitFieldsSpecModel < Sequel::Model
@@ -34,6 +35,10 @@ describe Sequel::Plugins::BitFields do
     SpecModel.create.should respond_to(:reviewed?)
   end
 
+  it "works with the constructor" do
+    SpecModel.new(:started => true).started?.should be_true
+  end
+
   describe :bit_fields do
     it "stores the bit fields" do
       SpecModel.bit_fields[:status_bits].should   == [ :started, :finished, :reviewed ]
@@ -51,7 +56,8 @@ describe Sequel::Plugins::BitFields do
 
     it "returns some_bits of the AnotherSpecModel" do
       AnotherSpecModel.bit_fields.should == {
-        :some_bits => [ :fnord ]
+        :some_bits        => [ :some_fnord ],
+        :some_other_bits  => [ :some_other_bits_fnord ]
       }
     end
 
@@ -244,6 +250,22 @@ describe Sequel::Plugins::BitFields do
     it "returns a hash with the name of the bit fields and its representing indexes" do
       hash = SpecModel.bit_field_indexes_for(:status_bits)
       hash.should == { :started => 1, :finished => 2, :reviewed => 4 }
+    end
+  end
+
+  describe :scope do
+    before do
+      @model = AnotherSpecModel.create
+    end
+
+    it "adds the scope to the setter" do
+      expect{ @model.some_fnord = true }.to_not raise_error
+      expect{ @model.some_other_bits_fnord = true }.to_not raise_error
+    end
+
+    it "adds the scope to the getter" do
+      expect{ @model.some_fnord? }.to_not raise_error
+      expect{ @model.some_other_bits_fnord? }.to_not raise_error
     end
   end
 end

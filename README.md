@@ -79,31 +79,58 @@ Sequel::Plugins::BitFields.bit_fields_for_models
 # => { 'MyModel' => { :status_bits => [ :started, :finished, :reviewed ] } }
 ```
 
+### Scoping
+
+As you might find yourself in the situation, where you would like to define
+multiple bit fields with the same name, you will notice, that the straightforward
+attempt will overwrite the methods of the previously defined bit fields. In order to
+fix this, you can pass a `scope` options:
+
+```ruby
+class User < Sequel::Model
+  plugin :bit_fields,  :website_permission_bits,     [ :admin ], :scope => :website
+  plugin :bit_fields,  :iphone_app_permission_bits,  [ :admin ], :scope => :iphone
+  plugin :bit_fields,  :android_app_permission_bits, [ :admin ], :scope => :android
+end
+```
+
+This will change the name of the bit fields:
+
+```ruby
+User.new.website_admin?                         # false
+User.new.iphone_admin?                          # false
+User.new(:android_admin => true).android_admin? # true
+```
+
 ## The table
 
 If you are creating a new model from scratch:
 
-    DB = Sequel.sqlite
+```ruby
+DB = Sequel.sqlite
 
-    DB.create_table(:my_models) do
-      primary_key :id, :auto_increment => true
+DB.create_table(:my_models) do
+  primary_key :id, :auto_increment => true
 
-      # let's use Bignum as it has more space :)
-      # set the default to 0 and disallow null values
-      Bignum :status_bits, :null => false, :default => 0
-    end
+  # let's use Bignum as it has more space :)
+  # set the default to 0 and disallow null values
+  Bignum :status_bits, :null => false, :default => 0
+end
+```
 
-##The migration
+## The migration
 
 If you want to extend an existing model:
 
-    Sequel.migration do
-      change do
-        alter_table :users do
-          add_column :permission_bits, Bignum, :default => 0, :null => false
-        end
-      end
+```ruby
+Sequel.migration do
+  change do
+    alter_table :users do
+      add_column :permission_bits, Bignum, :default => 0, :null => false
     end
+  end
+end
+```
 
 ## Installation
 

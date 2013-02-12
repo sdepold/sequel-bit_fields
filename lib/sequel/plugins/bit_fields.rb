@@ -10,6 +10,13 @@ module Sequel::Plugins
 
     def self.configure(model, bit_field_column, bit_fields, options = {})
       model.class_eval do
+        options[:scope] = bit_field_column        if options[:scope] == true
+        options[:scope] = options[:scope].to_sym  if options[:scope].is_a?(String)
+
+        if options[:scope].is_a?(Symbol)
+          bit_fields = bit_fields.map { |bit_field| "#{options[:scope]}_#{bit_field}".to_sym }
+        end
+
         @@bit_fields_for_models[model.to_s] ||= {}
         @@bit_fields_for_models[model.to_s][bit_field_column] = bit_fields
 
@@ -90,6 +97,9 @@ module Sequel::Plugins
             value   = [true, 1, '1', 'true'].include?(value)
             current = self.send("#{bit_field_name}?".to_sym)
 
+            # init the bit_field with 0 if not yet set
+            self[bit_field_column] = 0 if self[bit_field_column].nil?
+
             self[bit_field_column] = if value && !current
               # value is true and current value is false
               self[bit_field_column] | index
@@ -109,7 +119,7 @@ module Sequel::Plugins
           #   model.finished? # == false
           #
           define_method("#{bit_field_name}?") do
-            self[bit_field_column] & index == index
+            (self[bit_field_column] || 0) & index == index
           end
         end
       end
