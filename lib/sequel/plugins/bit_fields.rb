@@ -87,10 +87,18 @@ module Sequel::Plugins
           #   model.finished = false
           #
           define_method("#{bit_field_name}=") do |value|
-            self[bit_field_column] = if value
+            value   = [true, 1, '1', 'true'].include?(value)
+            current = self.send("#{bit_field_name}?".to_sym)
+
+            self[bit_field_column] = if value && !current
+              # value is true and current value is false
               self[bit_field_column] | index
-            else
+            elsif !value && current
+              # value is false and current value is true
               self[bit_field_column] ^ index
+            else
+              # don't do anything
+              self[bit_field_column]
             end
           end
 

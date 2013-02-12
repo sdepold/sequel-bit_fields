@@ -61,7 +61,7 @@ describe Sequel::Plugins::BitFields do
   end
 
   describe :field= do
-    context "a freshly created object without any bits" do
+    context "a freshly created object without any set bit" do
       before do
         @model = SpecModel.create
       end
@@ -70,14 +70,54 @@ describe Sequel::Plugins::BitFields do
         @model.status_bits.should == 0
       end
 
+      it "sets status_bits to 0 if started is set to false" do
+        @model.update(:started => false)
+        @model.reload.status_bits.should == 0
+      end
+
       it "sets status_bits to 1 if started is set to true" do
         @model.started = true
+        @model.status_bits.should == 1
+      end
+
+      it "evaluates 0 as false" do
+        @model.started = 0
+        @model.status_bits.should == 0
+      end
+
+      it "evaluates 1 as true" do
+        @model.started = 1
+        @model.status_bits.should == 1
+      end
+
+      it "evaluates '0' as false" do
+        @model.started = '0'
+        @model.status_bits.should == 0
+      end
+
+      it "evaluates '1' as true" do
+        @model.started = '1'
+        @model.status_bits.should == 1
+      end
+
+      it "evaluates 'false' as false" do
+        @model.started = 'false'
+        @model.status_bits.should == 0
+      end
+
+      it "evaluates 'true' as true" do
+        @model.started = 'true'
         @model.status_bits.should == 1
       end
 
       it "sets status_bits to 2 if finished is set to true" do
         @model.finished = true
         @model.status_bits.should == 2
+      end
+
+      it "sets status_bits to 0 if finished is set to false" do
+        @model.finished = false
+        @model.status_bits.should == 0
       end
 
       it "sets status_bits to 4 if reviewed is set to true" do
