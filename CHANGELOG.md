@@ -1,4 +1,8 @@
-# v0.5.1 #
+# v0.6.0
+- added support for truthy or falsy values
+- fixed setting of false if bit_fields was previously already false
+
+# v0.5.1
 - class methods used to get defined for all classes. this is fixed.
 
 # v0.5.0
