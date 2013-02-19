@@ -1,3 +1,6 @@
+# v0.8.0
+- added possibilty to define the table name when using `_sql` methods
+
 # v0.7.0
 - fixed interpretation of bit_fields passed to the constructor
 - fixed compatibility of Model.new

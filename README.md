@@ -47,6 +47,9 @@ MyModel.where(MyModel.finished_sql(false)).all
 
 # let's find all the started and the finished instances
 MyModel.where("#{ MyModel.started_sql(true) } AND #{ MyModel.finished_sql(true) }").all
+
+# if you need to overwrite the table name:
+MyModel.where(MyModel.finished_sql(true, :table => '_my_tmp_model')).all
 ```
 
 ### Get the declared columns

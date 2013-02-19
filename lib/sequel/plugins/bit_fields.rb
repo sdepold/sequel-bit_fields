@@ -79,10 +79,11 @@ module Sequel::Plugins
           #   "status_bits & 1 = 1"
           #
           define_method("#{bit_field_name}_sql") do |*args|
-            value = [*args].first
-            value = true if value.nil?
+            value   = [*args].first
+            value   = true if value.nil?
+            options = { :table => self.table_name.to_s }.merge([*args][1] || {})
 
-            "`#{self.table_name.to_s}`.`#{bit_field_column}` & #{index} #{'!' unless value}= #{index}"
+            "`#{options[:table]}`.`#{bit_field_column}` & #{index} #{'!' unless value}= #{index}"
           end
         end
 

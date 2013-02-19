@@ -216,6 +216,10 @@ describe Sequel::Plugins::BitFields do
     it "returns the sql for falsy comparison of reviewed" do
       SpecModel.reviewed_sql(false).should == "`spec_models`.`status_bits` & 4 != 4"
     end
+
+    it "uses the passed table name" do
+      SpecModel.reviewed_sql(false, :table => '_spec_models').should == "`_spec_models`.`status_bits` & 4 != 4"
+    end
   end
 
   describe :status_bits do
