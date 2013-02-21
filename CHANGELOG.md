@@ -1,3 +1,6 @@
+# v0.9.0
+- added possibility to specify relevant values for bit_field_values_for
+
 # v0.8.0
 - added possibilty to define the table name when using `_sql` methods
 

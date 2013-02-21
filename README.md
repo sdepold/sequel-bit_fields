@@ -73,6 +73,10 @@ model = MyModel.new
 model.finished => true
 model.bit_field_values_for( :status_bits )
 # => {:started => false, :finished => true, :reviewed => false}
+
+# or with a specific value only:
+model.bit_field_values_for( :status_bits, true )
+# => { :finished => true }
 ```
 
 ### Get all bit fields of all models, which use the plugin
