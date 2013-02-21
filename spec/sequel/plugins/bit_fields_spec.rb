@@ -247,6 +247,16 @@ describe Sequel::Plugins::BitFields do
         values = @model.bit_field_values_for(:status_bits)
         values.should == { :finished => true, :started => false, :reviewed => false }
       end
+
+      it "returns a hash with value equal to true value" do
+        values = @model.bit_field_values_for(:status_bits, true)
+        values.should == {:finished => true}
+      end
+
+      it "returns a hash with value equal to false value" do
+        values = @model.bit_field_values_for(:status_bits, false)
+        values.should == {:started => false, :reviewed => false}
+      end
     end
   end
 

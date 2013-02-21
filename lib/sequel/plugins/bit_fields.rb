@@ -53,10 +53,17 @@ module Sequel::Plugins
           # returns a hash with all the values of the bit_fields
           define_method("bit_field_values_for") do |*args|
             if column_name = [*args].first
-              hash = {}
+              hash  = {}
+              value = [*args][1]
 
               @@bit_fields_for_models[model.to_s][column_name].each do |attribute|
                 hash[attribute.to_sym] = self.send("#{attribute}?".to_sym)
+              end
+
+              unless value.nil?
+                hash.dup.each do |key, _value|
+                  hash.delete(key) unless _value == value
+                end
               end
 
               hash
