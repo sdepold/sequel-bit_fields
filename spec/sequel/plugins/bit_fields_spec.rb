@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 class SpecModel < Sequel::Model
-  plugin :bit_fields, :status_bits,   [ :started, :finished, :reviewed ]
+  plugin :bit_fields, :status_bits,   [ :started, :finished, { :name => :reviewed, :description => 'This model has been reviewed.' } ]
   plugin :bit_fields, :paranoid_bits, [ :allow_mail ]
 end
 
@@ -12,6 +12,22 @@ end
 
 class NoBitFieldsSpecModel < Sequel::Model
 end
+
+status_bits_result = [{
+  :name        => :started,
+  :description => "Description for 'started' not available."
+}, {
+  :name        => :finished,
+  :description => "Description for 'finished' not available."
+}, {
+  :name        => :reviewed,
+  :description => 'This model has been reviewed.'
+}]
+
+paranoid_bits_result = [{
+  :name        => :allow_mail,
+  :description => "Description for 'allow_mail' not available."
+}]
 
 describe Sequel::Plugins::BitFields do
   describe :bit_fields_for_models do
@@ -41,23 +57,23 @@ describe Sequel::Plugins::BitFields do
 
   describe :bit_fields do
     it "stores the bit fields" do
-      SpecModel.bit_fields[:status_bits].should   == [ :started, :finished, :reviewed ]
-      SpecModel.bit_fields(:status_bits).should   == [ :started, :finished, :reviewed ]
-      SpecModel.bit_fields[:paranoid_bits].should == [ :allow_mail ]
-      SpecModel.bit_fields(:paranoid_bits).should == [ :allow_mail ]
+      SpecModel.bit_fields[:status_bits].should   == status_bits_result
+      SpecModel.bit_fields(:status_bits).should   == status_bits_result
+      SpecModel.bit_fields[:paranoid_bits].should == paranoid_bits_result
+      SpecModel.bit_fields(:paranoid_bits).should == paranoid_bits_result
     end
 
     it "returns all bit_fields of the models" do
       SpecModel.bit_fields.should == {
-        :status_bits   => [ :started, :finished, :reviewed ],
-        :paranoid_bits => [ :allow_mail ]
+        :status_bits   => status_bits_result,
+        :paranoid_bits => paranoid_bits_result
       }
     end
 
     it "returns some_bits of the AnotherSpecModel" do
       AnotherSpecModel.bit_fields.should == {
-        :some_bits        => [ :some_fnord ],
-        :some_other_bits  => [ :some_other_bits_fnord ]
+        :some_bits        => [{ :name => :some_fnord, :description => "Description for 'some_fnord' not available." }],
+        :some_other_bits  => [{ :name => :some_other_bits_fnord, :description => "Description for 'some_other_bits_fnord' not available." }]
       }
     end
 

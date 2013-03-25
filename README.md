@@ -55,8 +55,33 @@ MyModel.where(MyModel.finished_sql(true, :table => '_my_tmp_model')).all
 ### Get the declared columns
 
 ```ruby
-MyModel.bit_fields # => { :status_bits => [ :started, :finished, :reviewed ] }
-MyModel.bit_fields( :status_bits ) # => [ :started, :finished, :reviewed ]
+MyModel.bit_fields
+=begin
+{ :status_bits => [ {
+  :name => :started,
+  :description => "Description for 'started' not available."
+}, {
+  :name        => :finished,
+  :description => "Description for 'finished' not available."
+}, {
+  :name        => :reviewed,
+  :description => "Description for 'reviewed' not available."
+} ] }
+=end
+
+MyModel.bit_fields( :status_bits )
+=begin
+[ {
+  :name => :started,
+  :description => "Description for 'started' not available."
+}, {
+  :name        => :finished,
+  :description => "Description for 'finished' not available."
+}, {
+  :name        => :reviewed,
+  :description => "Description for 'reviewed' not available."
+} ]
+=end
 ```
 
 ### Get the indexes of the columns
@@ -83,7 +108,19 @@ model.bit_field_values_for( :status_bits, true )
 
 ```ruby
 Sequel::Plugins::BitFields.bit_fields_for_models
-# => { 'MyModel' => { :status_bits => [ :started, :finished, :reviewed ] } }
+=begin
+{ 'MyModel' => { :status_bits => [ {
+    :name => :started,
+    :description => "Description for 'started' not available."
+  }, {
+    :name        => :finished,
+    :description => "Description for 'finished' not available."
+  }, {
+    :name        => :reviewed,
+    :description => "Description for 'reviewed' not available."
+  } ] }
+}
+=end
 ```
 
 ### Scoping
@@ -95,9 +132,9 @@ fix this, you can pass a `scope` options:
 
 ```ruby
 class User < Sequel::Model
-  plugin :bit_fields,  :website_permission_bits,     [ :admin ], :scope => :website
-  plugin :bit_fields,  :iphone_app_permission_bits,  [ :admin ], :scope => :iphone
-  plugin :bit_fields,  :android_app_permission_bits, [ :admin ], :scope => :android
+  plugin :bit_fields, :website_permission_bits,     [ :admin ], :scope => :website
+  plugin :bit_fields, :iphone_app_permission_bits,  [ :admin ], :scope => :iphone
+  plugin :bit_fields, :android_app_permission_bits, [ :admin ], :scope => :android
 end
 ```
 
@@ -107,6 +144,19 @@ This will change the name of the bit fields:
 User.new.website_admin?                         # false
 User.new.iphone_admin?                          # false
 User.new(:android_admin => true).android_admin? # true
+```
+
+### Options
+
+Version `1.0.0` introduced the possibility to describe fields. Here is how it looks like:
+
+```ruby
+class User < Sequel::Model
+  plugin :bit_fields, :some_bits, [{
+    :name        => :checked,
+    :description => "This bit fields states that the model has been checked by someone."
+  }]
+end
 ```
 
 ## The table
@@ -141,12 +191,14 @@ end
 
 ## Installation
 
-    # gem approach
-    gem install sequel-bit_fields
+```
+# gem approach
+gem install sequel-bit_fields
 
-    # bundler approach
-    # add this to your Gemfile
-    gem 'sequel-bit_fields'
+# bundler approach
+# add this to your Gemfile
+gem 'sequel-bit_fields'
+```
 
 ## Side notes
 

@@ -1,3 +1,7 @@
+# v1.0.0
+- bit-field symbols are transformed into objects
+- this allows to add additional information to the bit-fields like description and such thingies.
+
 # v0.9.0
 - added possibility to specify relevant values for bit_field_values_for
 

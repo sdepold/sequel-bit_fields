@@ -13,9 +13,27 @@ module Sequel::Plugins
         options[:scope] = bit_field_column        if options[:scope] == true
         options[:scope] = options[:scope].to_sym  if options[:scope].is_a?(String)
 
-        if options[:scope].is_a?(Symbol)
-          bit_fields = bit_fields.map { |bit_field| "#{options[:scope]}_#{bit_field}".to_sym }
+        bit_fields = bit_fields.dup.map do |bit_field|
+          if bit_field.is_a?(Hash)
+            raise "Unnamed field: #{bit_field.inspect}" unless bit_field[:name]
+            bit_field
+          else
+            { :name => bit_field }
+          end
         end
+
+        if options[:scope].is_a?(Symbol)
+          bit_fields = bit_fields.map do |bit_field|
+            bit_field.merge(:name => "#{options[:scope]}_#{bit_field[:name]}".to_sym)
+          end
+        end
+
+        bit_fields = bit_fields.map do |bit_field|
+          { :description => "Description for '#{bit_field[:name]}' not available." }.merge(bit_field)
+        end
+
+        # at this point, all bit_fields do have the following format:
+        # { description => 'something', :name => :something }
 
         @@bit_fields_for_models[model.to_s] ||= {}
         @@bit_fields_for_models[model.to_s][bit_field_column] = bit_fields
@@ -36,7 +54,7 @@ module Sequel::Plugins
               hash = {}
 
               @@bit_fields_for_models[model.to_s][column_name].each_with_index do |attribute, i|
-                hash[attribute.to_sym] = 2**i
+                hash[attribute[:name].to_sym] = 2**i
               end
 
               hash
@@ -57,7 +75,7 @@ module Sequel::Plugins
               value = [*args][1]
 
               @@bit_fields_for_models[model.to_s][column_name].each do |attribute|
-                hash[attribute.to_sym] = self.send("#{attribute}?".to_sym)
+                hash[attribute[:name].to_sym] = self.send("#{attribute[:name]}?".to_sym)
               end
 
               unless value.nil?
@@ -74,8 +92,9 @@ module Sequel::Plugins
         end
       end
 
-      bit_fields.each_with_index do |bit_field_name, i|
-        index = 2**i
+      bit_fields.each_with_index do |bit_field, i|
+        bit_field_name = bit_field[:name]
+        index          = 2**i
 
         model.class.instance_eval do
           # inject the sql generator methods
