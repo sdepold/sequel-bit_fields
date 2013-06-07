@@ -148,6 +148,26 @@ module Sequel::Plugins
           define_method("#{bit_field_name}?") do
             (self[bit_field_column] || 0) & index == index
           end
+
+          # inject the dataset methods
+          # example:
+          #   MyModel.finished(true)
+          #   MyModel.where(:foo => "bar").finished
+          # and would return a dataset with
+          #   "status_bits & 1 = 1"
+          #
+          dataset_module do
+            define_method("#{bit_field_name}") do |*args|
+              value   = [*args].first
+              value   = true if value.nil?
+
+              if value
+                filter({(bit_field_column.to_sym.sql_number & index) => index})
+              else
+                exclude({(bit_field_column.to_sym.sql_number & index) => index})
+              end
+            end
+          end
         end
       end
     end
