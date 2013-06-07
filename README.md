@@ -43,7 +43,7 @@ And we might want to find instances:
 MyModel.finished(true).all
 
 # let's find all unfinished instances
-MyModel.finished(false)).all
+MyModel.finished(false).all
 
 # let's find all the started and the finished instances
 MyModel.started.finished.all
