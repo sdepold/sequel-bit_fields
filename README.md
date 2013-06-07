@@ -40,13 +40,13 @@ And we might want to find instances:
 
 ```ruby
 # let's find all the finished instances
-MyModel.where(MyModel.finished_sql(true)).all
+MyModel.finished(true).all
 
 # let's find all unfinished instances
-MyModel.where(MyModel.finished_sql(false)).all
+MyModel.finished(false).all
 
 # let's find all the started and the finished instances
-MyModel.where("#{ MyModel.started_sql(true) } AND #{ MyModel.finished_sql(true) }").all
+MyModel.started.finished.all
 
 # if you need to overwrite the table name:
 MyModel.where(MyModel.finished_sql(true, :table => '_my_tmp_model')).all
@@ -213,3 +213,4 @@ Hereby released under MIT license.
 - BlackLane GmbH
 - [Sascha Depold](http://depold.com) ([Twitter](http://twitter.com/sdepold) | [Github](http://github.com/sdepold))
 - jethroo
+- [Markus 'iblue' Fenske](http://github.com/iblue)
