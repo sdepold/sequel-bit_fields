@@ -238,6 +238,43 @@ describe Sequel::Plugins::BitFields do
     end
   end
 
+  describe :field_dataset do
+    it "returns the dataset for truthy comparison of started" do
+      SpecModel.started.sql.should ==
+        "SELECT * FROM `spec_models` WHERE ((`status_bits` & 1) = 1)"
+    end
+
+    it "returns the dataset for falsy comparison of started" do
+      SpecModel.started(false).sql.should ==
+        "SELECT * FROM `spec_models` WHERE ((`status_bits` & 1) != 1)"
+    end
+
+    it "returns the dataset for truthy comparison of finished" do
+      SpecModel.finished.sql.should ==
+        "SELECT * FROM `spec_models` WHERE ((`status_bits` & 2) = 2)"
+    end
+
+    it "returns the dataset for falsy comparison of finished" do
+      SpecModel.finished(false).sql.should ==
+        "SELECT * FROM `spec_models` WHERE ((`status_bits` & 2) != 2)"
+    end
+
+    it "returns the dataset for truthy comparison of reviewed" do
+      SpecModel.reviewed.sql.should ==
+        "SELECT * FROM `spec_models` WHERE ((`status_bits` & 4) = 4)"
+    end
+
+    it "returns the dataset for falsy comparison of reviewed" do
+      SpecModel.reviewed(false).sql.should ==
+        "SELECT * FROM `spec_models` WHERE ((`status_bits` & 4) != 4)"
+    end
+
+    it "allows chaining of datasets" do
+      SpecModel.started.reviewed(false).sql.should == 
+        "SELECT * FROM `spec_models` WHERE (((`status_bits` & 1) = 1) AND ((`status_bits` & 4) != 4))"
+    end
+  end
+
   describe :status_bits do
     context "an object with finished set to true" do
       before do
