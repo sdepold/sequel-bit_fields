@@ -213,3 +213,4 @@ Hereby released under MIT license.
 - BlackLane GmbH
 - [Sascha Depold](http://depold.com) ([Twitter](http://twitter.com/sdepold) | [Github](http://github.com/sdepold))
 - jethroo
+- [Markus 'iblue' Fenske](http://github.com/iblue)
