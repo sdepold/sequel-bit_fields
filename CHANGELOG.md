@@ -1,3 +1,9 @@
+# v1.1.1 
+- Sequel removed some core extensions. Regression has been taken into account.
+
+# v1.1.0
+- defined methods to the instances that reflects the value of the bitfield
+
 # v1.0.0
 - bit-field symbols are transformed into objects
 - this allows to add additional information to the bit-fields like description and such thingies.
