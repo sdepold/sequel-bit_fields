@@ -158,14 +158,7 @@ module Sequel::Plugins
           #
           dataset_module do
             define_method("#{bit_field_name}") do |*args|
-              value   = [*args].first
-              value   = true if value.nil?
-
-              if value
-                filter({(bit_field_column.to_sym.sql_number & index) => index})
-              else
-                exclude({(bit_field_column.to_sym.sql_number & index) => index})
-              end
+              filter model.send("#{bit_field_name}_sql", *args)
             end
           end
         end
