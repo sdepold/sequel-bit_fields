@@ -16,6 +16,11 @@ RSpec.configure do |config|
     primary_key :id, :auto_increment => true
     Bignum :some_bits, :null => false, :default => 0
   end
+  
+  DB.create_table(:spec_roles_models) do
+    primary_key :id, :auto_increment => true
+    Bignum :roles, :null => false, :default => 0
+  end
 
   DB.create_table(:no_bit_fields_spec_models) do
     primary_key :id, :auto_increment => true
