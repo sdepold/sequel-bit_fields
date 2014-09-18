@@ -159,6 +159,39 @@ class User < Sequel::Model
 end
 ```
 
+### Assigning symbols to columns and multiple bit_field assignment
+
+You may want to set a bit_field via the column name and pass it a symbol.
+Or you may find it useful to turn on multiple bit_fields at the same time.
+
+Values that are not passed will be set to false. This behavior is useful 
+if you want to set specific bit_fields and not have to set every bit_field.
+
+Given the model:
+```ruby
+class MyModel < Sequel::Model
+  plugin :bit_fields, :roles, [:author,:contributor,:reader]
+end
+```
+
+Let's create a user that is a reader and contributor:
+
+```ruby
+user = MyModel.new
+user.roles = [:contributor,:reader]
+
+user.contributor? # true
+user.reader?      # true
+user.author?      # false
+
+user.roles = :author
+
+user.author?      # true
+user.reader?      # false
+user.contributor? # false
+```
+
+
 ## The table
 
 If you are creating a new model from scratch:
@@ -214,3 +247,4 @@ Hereby released under MIT license.
 - [Sascha Depold](http://depold.com) ([Twitter](http://twitter.com/sdepold) | [Github](http://github.com/sdepold))
 - jethroo
 - [Markus 'iblue' Fenske](http://github.com/iblue)
+- [Jon Pitts](http://github.com/jonpitts)
