@@ -1,4 +1,7 @@
-# v1.1.1 
+# v1.2.0
+- Added shorthand assignments.
+
+# v1.1.1
 - Sequel removed some core extensions. Regression has been taken into account.
 
 # v1.1.0
