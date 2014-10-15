@@ -1,3 +1,6 @@
+# v1.2.1
+- Fix quotation for postgres.
+
 # v1.2.0
 - Added shorthand assignments.
 

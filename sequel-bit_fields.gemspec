@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'sequel-bit_fields'
-  s.version     = '1.2.0'
+  s.version     = '1.2.1'
   s.date        = '2014-02-27'
   s.summary     = "A Sequel compatible version of common bit field technique."
   s.description = "Use this plugin to add flags/bits to your Sequel based models."
