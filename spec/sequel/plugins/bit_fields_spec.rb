@@ -240,6 +240,11 @@ describe Sequel::Plugins::BitFields do
     it "uses the passed table name" do
       SpecModel.reviewed_sql(false, :table => '_spec_models').should == "`_spec_models`.`status_bits` & 4 != 4"
     end
+
+    it "properly quotes table and column when using postgres" do
+      stub_const("DB", Sequel.postgres)
+      SpecModel.started_sql.should == "\"spec_models\".\"status_bits\" & 1 = 1"
+    end
   end
 
   describe :field_dataset do
