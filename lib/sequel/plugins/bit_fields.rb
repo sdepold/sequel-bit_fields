@@ -133,7 +133,7 @@ module Sequel::Plugins
             value   = true if value.nil?
             options = { :table => self.table_name.to_s }.merge([*args][1] || {})
 
-            "`#{options[:table]}`.`#{bit_field_column}` & #{index} #{'!' unless value}= #{index}"
+            "#{DB.literal(Sequel.qualify(options[:table], bit_field_column))} & #{index} #{'!' unless value}= #{index}"
           end
         end
 
