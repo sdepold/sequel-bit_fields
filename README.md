@@ -123,6 +123,22 @@ Sequel::Plugins::BitFields.bit_fields_for_models
 =end
 ```
 
+### Check if a bit has been changed
+
+Please note that you will need to add the `dirty` plugin to your model, too.
+
+```ruby
+class DirtyModel < Sequel::Model
+  plugin :dirty
+  plugin :bit_fields, :status_bits, [ :started, :finished, :reviewed ]
+end
+
+model = DirtyModel.create
+model.bit_changed?(:finished) # false
+model.finished = !model.finished
+model.bit_changed?(:finished) # true
+```
+
 ### Scoping
 
 As you might find yourself in the situation, where you would like to define
@@ -164,7 +180,7 @@ end
 You may want to set a bit_field via the column name and pass it a symbol.
 Or you may find it useful to turn on multiple bit_fields at the same time.
 
-Values that are not passed will be set to false. This behavior is useful 
+Values that are not passed will be set to false. This behavior is useful
 if you want to set specific bit_fields and not have to set every bit_field.
 
 Given the model:

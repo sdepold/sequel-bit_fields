@@ -223,6 +223,15 @@ describe Sequel::Plugins::BitFields do
       @model = DirtyModel.create
     end
 
+    context "model without the dirty plugin" do
+      it "throws an error" do
+        model = SpecModel.create
+        expect {
+          model.bit_changed?(:foo)
+        }.to raise_error("Dirty plugin was not activated. Add 'plugin :dirty' to your model declaration!")
+      end
+    end
+
     context "bit did not change" do
       it "returns false" do
         @model.bit_changed?(:finished).should be_false
@@ -314,7 +323,7 @@ describe Sequel::Plugins::BitFields do
     end
 
     it "allows chaining of datasets" do
-      SpecModel.started.reviewed(false).sql.should == 
+      SpecModel.started.reviewed(false).sql.should ==
         "SELECT * FROM `spec_models` WHERE ((`spec_models`.`status_bits` & 1 = 1) AND (`spec_models`.`status_bits` & 4 != 4))"
     end
   end
@@ -332,61 +341,61 @@ describe Sequel::Plugins::BitFields do
       end
     end
   end
-  
+
   describe :bit_field_column= do
     context "an object with roles set to :author" do
       before do
         @model = SpecRolesModel.create
         @model.roles = :author
       end
-      
+
       it "returns true for author?" do
         @model.author?.should be_true
       end
-      
+
       it "returns false for reader? and contributor?" do
         @model.reader?.should be_false
         @model.contributor?.should be_false
       end
     end
-    
+
     context "an object with roles set to [:reader,:contributor]" do
       before do
         @model = SpecRolesModel.create
         @model.roles = [:reader,:contributor]
       end
-      
+
       it "returns true for reader? and contributor? and returns false for author?" do
         @model.reader?.should be_true
         @model.contributor?.should be_true
         @model.author?.should be_false
       end
-      
+
       it "returns false for reader? and contributor? if roles set to :author" do
         @model.roles = :author
         @model.reader?.should be_false
         @model.contributor?.should be_false
       end
-      
+
       context "an object with roles set to 6" do
         before do
           @model = SpecRolesModel.create
           @model.roles = 6
         end
-        
+
         it "returns true for reader? and contributor? and returns false for author?" do
           @model.reader?.should be_true
           @model.contributor?.should be_true
           @model.author?.should be_false
         end
-        
+
         it "returns false for author? reader? and contributor? if roles set to 0" do
           @model.roles = 0
           @model.reader?.should be_false
           @model.contributor?.should be_false
           @model.author?.should be_false
         end
-        
+
         it "returns true for author? and false for reader? and contributor? if roles set to 1" do
           @model.roles = 1
           @model.reader?.should be_false
@@ -394,19 +403,19 @@ describe Sequel::Plugins::BitFields do
           @model.author?.should be_true
         end
       end
-      
+
       context "an object with roles set to []" do
         before do
           @model = SpecRolesModel.create
           @model.roles = []
         end
-        
+
         it "returns false for author? reader? and contributor?" do
           @model.reader?.should be_false
           @model.contributor?.should be_false
           @model.author?.should be_false
         end
-        
+
         it "returns true for author? if roles set to [:author]" do
           @model.roles = [:author]
           @model.author?.should be_true
@@ -414,7 +423,7 @@ describe Sequel::Plugins::BitFields do
       end
     end
   end
-  
+
   describe :bit_field_values_for do
     context "an object with finished set to true" do
       before do

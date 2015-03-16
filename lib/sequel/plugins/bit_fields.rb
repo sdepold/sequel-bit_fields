@@ -64,7 +64,7 @@ module Sequel::Plugins
           end
         end
       end
-      
+
       model.instance_eval do
         # inject convenience method for multiple flag or bit_field assignment
         # overrides default assignment behavior for column_name=
@@ -75,7 +75,7 @@ module Sequel::Plugins
         unless respond_to?(flag_assign)
           define_method(flag_assign) do |args|
             args = [*args]
-            
+
             if args.empty?
               self[bit_field_column] = 0
             #argument is an integer
@@ -89,7 +89,7 @@ module Sequel::Plugins
             end
           end
         end
-        
+
         unless respond_to?(:bit_field_values_for)
           # inject the method bit_field_values_for which
           # returns a hash with all the values of the bit_fields
@@ -117,6 +117,10 @@ module Sequel::Plugins
 
         unless respond_to?(:bit_changed?)
           define_method(:bit_changed?) do |*args|
+            unless defined? self.initial_value()
+              raise "Dirty plugin was not activated. Add 'plugin :dirty' to your model declaration!"
+            end
+
             if args.size == 1
               bitfield_name = args.first
 
