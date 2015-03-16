@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 ## Upcoming
 ### Changed
 - Use keepachangelog format for this change log
+- Use `db` rather than `DB`
+
+### Removed
+- `pg` dependency
+- PostgreSQL specific test
 
 ## v1.2.1
 ### Changed
