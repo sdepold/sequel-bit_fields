@@ -17,6 +17,11 @@ end
 class NoBitFieldsSpecModel < Sequel::Model
 end
 
+class DirtyModel < Sequel::Model
+  plugin :dirty
+  plugin :bit_fields, :status_bits, [ :started, :finished, :reviewed ]
+end
+
 status_bits_result = [{
   :name        => :started,
   :description => "Description for 'started' not available."
@@ -36,7 +41,7 @@ paranoid_bits_result = [{
 describe Sequel::Plugins::BitFields do
   describe :bit_fields_for_models do
     it 'returns all defined bit fields for all models' do
-      Sequel::Plugins::BitFields.bit_fields_for_models.keys.sort.should == ['AnotherSpecModel', 'SpecModel', 'SpecRolesModel']
+      Sequel::Plugins::BitFields.bit_fields_for_models.keys.sort.should =~ ['AnotherSpecModel', 'SpecModel', 'SpecRolesModel', 'DirtyModel']
     end
   end
 
@@ -208,6 +213,41 @@ describe Sequel::Plugins::BitFields do
       it "returns false for started? if started was set to false" do
         @model.started = false
         @model.started?.should be_false
+      end
+    end
+  end
+
+  # Similar to Sequel#column_changed?
+  describe :bit_changed? do
+    before do
+      @model = DirtyModel.create
+    end
+
+    context "bit did not change" do
+      it "returns false" do
+        @model.bit_changed?(:finished).should be_false
+      end
+    end
+
+    context "bit did change" do
+      before do
+        @model.finished = !@model.finished?
+      end
+
+      context "before save" do
+        it "returns true" do
+          @model.bit_changed?(:finished).should be_true
+        end
+      end
+
+      context "after save" do
+        before do
+          @model.save
+        end
+
+        it "returns false" do
+          @model.bit_changed?(:finished).should be_false
+        end
       end
     end
   end

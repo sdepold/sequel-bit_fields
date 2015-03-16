@@ -114,6 +114,34 @@ module Sequel::Plugins
             end
           end
         end
+
+        unless respond_to?(:bit_changed?)
+          define_method(:bit_changed?) do |*args|
+            if args.size == 1
+              bitfield_name = args.first
+
+              # Search for column name and bit
+              column_name = nil
+              bit         = nil
+              @@bit_fields_for_models[model.to_s].each do |_column_name, bitfields|
+                bitfields.each_with_index do |bitfield, index|
+                  if bitfield[:name] == bitfield_name
+                    column_name = _column_name
+                    bit         = 1 << index
+                    break
+                  end
+                end
+                break if column_name
+              end
+              raise "Bit field with name `#{bitfield_name}' unknown" unless column_name
+
+              # Check if bit has changed
+              return initial_value(column_name) & bit != self[column_name] & bit
+            else
+              raise 'No bit field name was passed!'
+            end
+          end
+        end
       end
 
       bit_fields.each_with_index do |bit_field, i|
