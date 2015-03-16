@@ -25,4 +25,9 @@ RSpec.configure do |config|
   DB.create_table(:no_bit_fields_spec_models) do
     primary_key :id, :auto_increment => true
   end
+
+  DB.create_table(:dirty_models) do
+    primary_key :id, :auto_increment => true
+    Bignum :status_bits, :null => false, :default => 0
+  end
 end
