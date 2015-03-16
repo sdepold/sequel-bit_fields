@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## Upcoming
+## 1.3.0
 ### Added
 - Possibility to check if a bit has changed via `bit_changed?`
 
